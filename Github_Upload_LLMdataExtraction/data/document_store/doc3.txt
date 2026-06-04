@@ -1,0 +1,5 @@
+Security Best Practices
+
+Security is essential in software development. Key practices include input validation, proper authentication, encryption of sensitive data, regular security updates, and following the principle of least privilege.
+
+Common vulnerabilities to avoid include SQL injection, cross-site scripting, and insecure direct object references. Security should be considered from the design phase of any application.

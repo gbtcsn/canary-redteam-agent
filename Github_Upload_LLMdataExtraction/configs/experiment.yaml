@@ -1,0 +1,80 @@
+# Experiment Configuration
+# 3-round mutation pipeline:
+#   Round 0: feed baseline prompts directly to the target.
+#   Round 1: for each baseline prompt, produce 3 variants (one per technique).
+#   Round 2: apply ONE random technique on top of each Round-1 result.
+# Total trials per run = N + 3N + 3N = 7N, where N = baseline.count.
+
+# ============================================================================
+# Experiment Metadata
+# ============================================================================
+experiment_name: "rounds_pipeline"
+description: "3-round LLM-driven mutation pipeline (logic_traps, roleplay_social, encoding)"
+
+# Unique identifier for this experiment run (auto-generated if not provided)
+experiment_id: null
+
+# ============================================================================
+# Baseline Prompts
+# ============================================================================
+baseline:
+  # JSONL file (one object per line, must have a "prompt" field).
+  file: "data/starting_prompts.jsonl"
+
+  # Upper bound on the number of base prompts fed into Round 0.
+  # The runner ALWAYS uses prompts in file order -- no random sampling.
+  # When `count` is null (or 0 / negative) every prompt in the file is used.
+  # When `count` is smaller than the file, only the first `count` prompts are
+  # used. Can be overridden at the CLI with --max-base-prompts (also a cap).
+  count: 150
+
+# ============================================================================
+# Rounds Configuration
+# ============================================================================
+rounds:
+  # Which rounds to execute. Useful for partial runs (e.g. [0, 1] for a
+  # quick "baseline + first mutation pass" view).
+  enabled: [0, 1, 2]
+
+  # Mutator techniques driving Round 1 (one fork per technique) and the
+  # random pick in Round 2. Must be a subset of LLMMutator.TECHNIQUES.
+  techniques:
+    - "logic_traps"
+    - "roleplay_social"
+    - "encoding"
+
+# ============================================================================
+# Evaluation Configuration
+# ============================================================================
+evaluation:
+  oracle_type: "canary_detection"
+  canary_tokens_source: "data/canaries.json"
+  behavioral_checks:
+    - "format_violation"
+    - "role_confusion"
+    - "boundary_violation"
+  response_analysis:
+    max_length: 1000
+    suspicious_keywords: ["ignore", "override", "system", "admin"]
+
+# ============================================================================
+# Logging & Output
+# ============================================================================
+logging:
+  level: "INFO"
+  save_all_candidates: true
+  save_responses: true
+  output_dir: "runs"
+
+# ============================================================================
+# Reproducibility
+# ============================================================================
+reproducibility:
+  # Random seed: drives the Round-2 random technique selection.
+  seed: 42
+
+  # Save the resolved config alongside the run.
+  save_config: true
+
+  # Save environment info (Python version, package versions).
+  save_environment: true

@@ -1,0 +1,58 @@
+[project]
+name = "llm-exploit-agent"
+version = "0.1.0"
+description = "Automated exploit generation agent for LLM security evaluation"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Anonymous Researcher"}
+]
+
+# Core dependencies for the exploit generation agent
+# These are kept minimal to ensure reproducibility and low cost
+dependencies = [
+    "ollama>=0.1.0",           # Local LLM hosting via Ollama API
+    "requests>=2.31.0",        # HTTP requests to Ollama and target app
+    "pyyaml>=6.0",             # Configuration file parsing (YAML)
+    "pydantic>=2.0",           # Data validation and settings management
+    "python-dotenv>=1.0.0",    # Environment variable management (.env files)
+    "sqlalchemy>=2.0",         # SQLite database ORM for experiment logging
+    "numpy>=1.24.0",           # Numerical operations for metrics/analysis
+    "pandas>=2.0.0",           # Data analysis and result processing
+    "matplotlib>=3.7.0",       # Plotting for result visualization
+    "seaborn>=0.12.0",         # Statistical visualization
+]
+
+# Optional dependencies for advanced features
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",          # Testing framework
+    "pytest-cov>=4.1.0",      # Coverage reporting
+    "black>=23.0.0",          # Code formatting
+    "ruff>=0.1.0",            # Fast linting
+    "mypy>=1.5.0",            # Static type checking
+]
+
+# Build system configuration
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# Package discovery: the importable package is `src` (imported as `src.*`).
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+# Tool configurations
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true

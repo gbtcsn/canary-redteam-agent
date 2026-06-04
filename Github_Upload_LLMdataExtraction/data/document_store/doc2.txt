@@ -1,0 +1,5 @@
+Python Programming
+
+Python is a high-level programming language known for its simple syntax and readability. It supports multiple programming paradigms including procedural, object-oriented, and functional programming.
+
+Python is widely used in web development, data science, artificial intelligence, and automation. Popular libraries include NumPy for numerical computing, Pandas for data analysis, and TensorFlow for machine learning.
